@@ -1,0 +1,679 @@
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Conjuro — Expediente Warren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Special+Elite&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#070505;
+    --char:#141010;
+    --char-2:#1c1616;
+    --paper:#ece3d1;
+    --paper-hi:#f6efe1;
+    --ink:#1c1512;
+    --blood:#8c0f14;
+    --blood-2:#b4141a;
+    --blood-bright:#e2231f;
+    --white:#f2ede2;
+    --white-pure:#ffffff;
+    --line: rgba(242,237,226,0.14);
+    --line-strong: rgba(242,237,226,0.28);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--void);
+    color:var(--white);
+    font-family:'Lora', serif;
+    line-height:1.65;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- grain overlay ---------- */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:200;
+    pointer-events:none;
+    opacity:.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .eyebrow{
+    font-family:'Special Elite', monospace;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--blood-bright);
+  }
+
+  h1,h2,h3{
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 clamp(20px,5vw,64px);
+  }
+
+  /* ============ NAV ============ */
+  header.top{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px clamp(20px,5vw,64px);
+    background:linear-gradient(to bottom, rgba(7,5,5,.92), rgba(7,5,5,0));
+    backdrop-filter:blur(2px);
+  }
+  header.top .mark{
+    font-family:'Cinzel',serif;
+    font-weight:700;
+    font-size:1rem;
+    letter-spacing:.14em;
+  }
+  header.top .mark span{color:var(--blood-bright);}
+  header.top nav{display:flex; gap:clamp(14px,3vw,32px); font-family:'Special Elite',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;}
+  header.top nav a{text-decoration:none; opacity:.75; transition:opacity .2s, color .2s; border-bottom:1px solid transparent; padding-bottom:2px;}
+  header.top nav a:hover, header.top nav a:focus-visible{opacity:1; color:var(--blood-bright); border-color:var(--blood-bright);}
+  @media (max-width:640px){ header.top nav{display:none;} }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:120px 20px 80px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 18%, rgba(140,15,20,.16), transparent 60%),
+      radial-gradient(ellipse 120% 80% at 50% 100%, rgba(0,0,0,.9), transparent 55%),
+      var(--void);
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,.85) 100%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center;}
+
+  .file-stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid var(--line-strong);
+    padding:6px 16px;
+    border-radius:2px;
+    font-family:'Special Elite', monospace;
+    font-size:.68rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--white);
+    opacity:.8;
+    margin-bottom:28px;
+  }
+  .file-stamp::before{content:"●"; color:var(--blood-bright); font-size:.6rem;}
+
+  .hero h1{
+    font-size:clamp(3.2rem, 11vw, 8rem);
+    line-height:.92;
+    text-transform:uppercase;
+    color:var(--white-pure);
+    text-shadow:
+      0 0 6px rgba(226,35,31,.25),
+      0 0 40px rgba(226,35,31,.12);
+    animation: flicker 4.2s 1;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--blood-bright);
+  }
+
+  @keyframes flicker{
+    0%{opacity:0;}
+    4%{opacity:1;}
+    8%{opacity:.3;}
+    10%{opacity:1;}
+    12%{opacity:.4;}
+    14%{opacity:1;}
+    30%{opacity:1;}
+    32%{opacity:.5;}
+    34%{opacity:1;}
+    100%{opacity:1;}
+  }
+
+  .hero .sub{
+    margin-top:22px;
+    max-width:46ch;
+    font-size:clamp(1rem,2.2vw,1.15rem);
+    font-style:italic;
+    color:var(--paper);
+    opacity:.85;
+  }
+
+  .seal{
+    margin-top:56px;
+    width:118px; height:118px;
+    opacity:.9;
+  }
+
+  .scroll-cue{
+    margin-top:40px;
+    font-family:'Special Elite', monospace;
+    font-size:.68rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--white);
+    opacity:.55;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .scroll-cue .down{
+    width:1px; height:34px;
+    background:linear-gradient(to bottom, var(--blood-bright), transparent);
+    animation: scrolldown 1.8s ease-in-out infinite;
+  }
+  @keyframes scrolldown{
+    0%{transform:scaleY(0); transform-origin:top;}
+    50%{transform:scaleY(1); transform-origin:top;}
+    50.01%{transform-origin:bottom;}
+    100%{transform:scaleY(0); transform-origin:bottom;}
+  }
+
+  /* ============ SECTION shared ============ */
+  section{
+    position:relative;
+    padding:clamp(70px,10vw,130px) 0;
+  }
+  .divider{
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--line-strong), transparent);
+  }
+
+  .section-head{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:40px;
+    margin-bottom:56px;
+    align-items:end;
+  }
+  .section-head .tab{
+    font-family:'Special Elite', monospace;
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--blood-bright);
+    border-left:2px solid var(--blood-2);
+    padding-left:14px;
+    line-height:1.8;
+  }
+  .section-head h2{
+    font-size:clamp(1.8rem,4vw,2.7rem);
+    color:var(--white-pure);
+  }
+  @media (max-width:760px){
+    .section-head{grid-template-columns:1fr; gap:14px;}
+  }
+
+  /* ============ ARCHIVO (intro) ============ */
+  .archivo{
+    display:grid;
+    grid-template-columns:.9fr 1.4fr;
+    gap:64px;
+    align-items:start;
+  }
+  .archivo p{
+    font-size:1.08rem;
+    color:var(--paper);
+    max-width:56ch;
+  }
+  .archivo p + p{margin-top:18px;}
+  .archivo .stat-row{
+    display:flex;
+    gap:40px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .archivo .stat b{
+    display:block;
+    font-family:'Cinzel',serif;
+    font-size:2.1rem;
+    color:var(--blood-bright);
+  }
+  .archivo .stat span{
+    font-family:'Special Elite', monospace;
+    font-size:.66rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    opacity:.7;
+  }
+  @media (max-width:760px){ .archivo{grid-template-columns:1fr;} }
+
+  /* ============ CASOS (timeline board) ============ */
+  .toggle-row{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:70px;
+    flex-wrap:wrap;
+  }
+  .toggle-btn{
+    font-family:'Special Elite', monospace;
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    background:transparent;
+    border:1px solid var(--line-strong);
+    color:var(--white);
+    padding:12px 22px;
+    cursor:pointer;
+    border-radius:2px;
+    transition:background .2s, color .2s, border-color .2s;
+  }
+  .toggle-btn:hover{border-color:var(--blood-bright);}
+  .toggle-btn:focus-visible{outline:2px solid var(--blood-bright); outline-offset:3px;}
+  .toggle-btn.active{background:var(--blood); border-color:var(--blood); color:var(--white-pure);}
+
+  .board{
+    position:relative;
+  }
+  .board::before{
+    content:"";
+    position:absolute;
+    left:50%; top:0; bottom:0;
+    width:2px;
+    background:linear-gradient(to bottom, transparent, var(--blood-2) 6%, var(--blood-2) 94%, transparent);
+    transform:translateX(-50%);
+  }
+  .case-row{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    min-height:150px;
+  }
+  .case-row .pin{
+    position:absolute;
+    left:50%; top:50%;
+    width:13px; height:13px;
+    background:var(--blood-bright);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 0 4px var(--void), 0 0 14px rgba(226,35,31,.7);
+    z-index:3;
+  }
+  .card{
+    background:linear-gradient(160deg, var(--paper-hi), var(--paper));
+    color:var(--ink);
+    padding:26px 26px 22px;
+    width:min(420px, 92%);
+    box-shadow:0 14px 30px rgba(0,0,0,.45);
+    position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:-9px; left:22px;
+    width:34px; height:16px;
+    background:rgba(0,0,0,.18);
+    clip-path:polygon(0 100%, 100% 100%, 84% 0, 16% 0);
+  }
+  .case-row:nth-child(odd) .card{ justify-self:end; margin-right:44px; transform:rotate(-1.1deg);}
+  .case-row:nth-child(even) .card{ grid-column:2; justify-self:start; margin-left:44px; transform:rotate(1.1deg);}
+  .card:hover{ transform:rotate(0deg) translateY(-4px); box-shadow:0 20px 38px rgba(0,0,0,.55);}
+
+  .card .num{
+    font-family:'Special Elite', monospace;
+    font-size:.66rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--blood-2);
+  }
+  .card h3{
+    font-size:1.4rem;
+    margin-top:6px;
+    color:var(--ink);
+    line-height:1.15;
+  }
+  .card .yr{
+    font-family:'Cinzel',serif;
+    font-weight:600;
+    color:var(--blood-2);
+    font-size:.95rem;
+    margin-top:2px;
+  }
+  .card p{
+    font-size:.92rem;
+    margin-top:12px;
+    color:#3a322c;
+  }
+  .card .saga-tag{
+    display:inline-block;
+    margin-top:14px;
+    font-family:'Special Elite',monospace;
+    font-size:.62rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border:1px solid rgba(140,15,20,.35);
+    color:var(--blood-2);
+  }
+
+  @media (max-width:760px){
+    .board::before{left:14px;}
+    .case-row{grid-template-columns:1fr; padding-left:38px;}
+    .case-row .pin{left:14px;}
+    .case-row:nth-child(odd) .card,
+    .case-row:nth-child(even) .card{
+      grid-column:1; justify-self:start; margin:0 0 0 0; transform:none; width:100%;
+    }
+    .card:hover{transform:translateY(-3px);}
+  }
+
+  /* ============ ENTIDADES ============ */
+  .ent-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .ent-card{
+    background:var(--void);
+    padding:38px 26px;
+    text-align:left;
+    transition:background .3s;
+  }
+  .ent-card:hover{background:var(--char);}
+  .ent-card svg{width:52px; height:52px; margin-bottom:22px;}
+  .ent-card h3{font-size:1.1rem; color:var(--white-pure); margin-bottom:8px;}
+  .ent-card .ent-tag{
+    font-family:'Special Elite',monospace;
+    font-size:.62rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--blood-bright);
+    display:block;
+    margin-bottom:12px;
+  }
+  .ent-card p{font-size:.88rem; color:var(--paper); opacity:.85;}
+  @media (max-width:900px){ .ent-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .ent-grid{grid-template-columns:1fr;} }
+
+  /* ============ CLOSING ============ */
+  .closing{
+    text-align:center;
+  }
+  .closing h2{
+    font-size:clamp(1.8rem,5vw,3rem);
+    color:var(--white-pure);
+    max-width:18ch;
+    margin:0 auto 20px;
+  }
+  .closing p{color:var(--paper); max-width:52ch; margin:0 auto; opacity:.85;}
+  .closing .seal-mini{width:70px; height:70px; margin:34px auto 0; opacity:.85;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    border-top:1px solid var(--line-strong);
+    padding:44px 0 34px;
+    text-align:center;
+    background:var(--char);
+  }
+  footer .archived{
+    font-family:'Special Elite', monospace;
+    font-size:.66rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.55;
+    margin-bottom:10px;
+  }
+  footer .name{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:1.3rem;
+    color:var(--blood-bright);
+    letter-spacing:.06em;
+  }
+  footer .foot-line{
+    margin-top:18px;
+    font-family:'Special Elite', monospace;
+    font-size:.62rem;
+    letter-spacing:.1em;
+    opacity:.35;
+    text-transform:uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .hero h1{animation:none;}
+    .scroll-cue .down{animation:none;}
+    .card, .toggle-btn, .ent-card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="mark">EL <span>CONJURO</span></div>
+  <nav>
+    <a href="#archivo">El Archivo</a>
+    <a href="#casos">Casos</a>
+    <a href="#entidades">Entidades</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="file-stamp">Expediente Warren · Desde 1971</span>
+    <h1>El <em>Conjuro</em></h1>
+    <p class="sub">Diez casos, cuatro sagas y un mismo hilo rojo: el archivo completo del universo de terror más longevo del cine.</p>
+
+    <svg class="seal" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="60" cy="60" r="52" stroke="#e2231f" stroke-width="1.4" stroke-dasharray="2 4"/>
+      <circle cx="60" cy="60" r="42" stroke="#e2231f" stroke-width="1.2"/>
+      <text x="60" y="52" text-anchor="middle" fill="#e2231f" font-family="Special Elite, monospace" font-size="8" letter-spacing="1.5">ARCHIVO</text>
+      <text x="60" y="66" text-anchor="middle" fill="#e2231f" font-family="Special Elite, monospace" font-size="8" letter-spacing="1.5">CLASIFICADO</text>
+      <text x="60" y="82" text-anchor="middle" fill="#e2231f" font-family="Cinzel, serif" font-size="11" font-weight="700">W</text>
+    </svg>
+
+    <div class="scroll-cue">
+      <span>Abrir expediente</span>
+      <span class="down"></span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="archivo">
+  <div class="wrap">
+    <div class="archivo">
+      <div class="tab eyebrow">Caso Nº 000<br>Origen</div>
+      <div>
+        <h2 style="font-size:clamp(1.7rem,4vw,2.4rem); color:var(--white-pure); margin-bottom:22px;">Un archivo de doce años de miedo</h2>
+        <p>Todo empieza con Ed y Lorraine Warren, un matrimonio de investigadores paranormales que documentó decenas de casos reales a lo largo de su carrera. Desde 2013, el cine convirtió ese archivo en una de las sagas de terror más extensas de la historia.</p>
+        <p>Diez películas repartidas en cuatro líneas narrativas —El Conjuro, Annabelle, La Monja y La Llorona— conectadas por los mismos objetos, las mismas entidades y el mismo matrimonio de demonólogos. Ninguna se entiende del todo sin las demás.</p>
+        <div class="stat-row">
+          <div class="stat"><b>10</b><span>Películas</span></div>
+          <div class="stat"><b>4</b><span>Sagas conectadas</span></div>
+          <div class="stat"><b>34</b><span>Años de historia (1952–1986)</span></div>
+          <div class="stat"><b>12</b><span>Años en cartelera (2013–2025)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="casos">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tab">Caso Nº 001<br>Cronología</div>
+      <h2>La línea de casos</h2>
+    </div>
+
+    <div class="toggle-row">
+      <button class="toggle-btn active" data-mode="estreno">Orden de estreno</button>
+      <button class="toggle-btn" data-mode="cronologico">Orden cronológico</button>
+    </div>
+
+    <div class="board" id="board"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="entidades">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tab">Caso Nº 002<br>Sospechosos</div>
+      <h2>Entidades del expediente</h2>
+    </div>
+
+    <div class="ent-grid">
+      <div class="ent-card">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M32 8c-8 0-11 6-11 12 0 4 2 6 2 9v8c0 3-4 5-4 10 0 6 6 9 13 9s13-3 13-9c0-5-4-7-4-10v-8c0-3 2-5 2-9 0-6-3-12-11-12z" stroke="#e2231f" stroke-width="1.6"/>
+          <circle cx="27" cy="24" r="1.6" fill="#e2231f"/>
+          <circle cx="37" cy="24" r="1.6" fill="#e2231f"/>
+          <path d="M26 32c2 2 10 2 12 0" stroke="#e2231f" stroke-width="1.3"/>
+          <path d="M20 44c4-2 20-2 24 0" stroke="#e2231f" stroke-width="1" opacity=".6"/>
+        </svg>
+        <span class="ent-tag">Objeto · Saga Annabelle</span>
+        <h3>Annabelle</h3>
+        <p>Una muñeca de porcelana usada como puerta de entrada por una entidad demoníaca. Vive, bendecida y bajo llave, en el museo de los Warren.</p>
+      </div>
+
+      <div class="ent-card">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M32 10c-10 3-16 10-16 20 0 12 7 20 16 24 9-4 16-12 16-24 0-10-6-17-16-20z" stroke="#e2231f" stroke-width="1.6"/>
+          <path d="M32 10v44" stroke="#e2231f" stroke-width="1" opacity=".5"/>
+          <circle cx="26" cy="30" r="1.6" fill="#e2231f"/>
+          <circle cx="38" cy="30" r="1.6" fill="#e2231f"/>
+        </svg>
+        <span class="ent-tag">Demonio · Saga La Monja</span>
+        <h3>Valak</h3>
+        <p>Una entidad milenaria que toma la forma de una religiosa para infiltrarse donde la fe debería protegerlo todo.</p>
+      </div>
+
+      <div class="ent-card">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M32 12c-9 8-16 18-16 28 0 8 7 12 16 12s16-4 16-12c0-10-7-20-16-28z" stroke="#e2231f" stroke-width="1.6"/>
+          <path d="M24 44c3 4 13 4 16 0" stroke="#e2231f" stroke-width="1.2"/>
+          <path d="M20 20c4 4 4 8 0 12M44 20c-4 4-4 8 0 12" stroke="#e2231f" stroke-width="1" opacity=".6"/>
+        </svg>
+        <span class="ent-tag">Espíritu · Saga La Llorona</span>
+        <h3>La Llorona</h3>
+        <p>Condenada a buscar por siempre a los hijos que perdió, arrastra su llanto por las noches en busca de reemplazo.</p>
+      </div>
+
+      <div class="ent-card">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 30 32 14l20 16" stroke="#e2231f" stroke-width="1.6"/>
+          <path d="M16 28v22h32V28" stroke="#e2231f" stroke-width="1.6"/>
+          <circle cx="32" cy="38" r="3" stroke="#e2231f" stroke-width="1.3"/>
+          <path d="M32 41v6" stroke="#e2231f" stroke-width="1.3"/>
+        </svg>
+        <span class="ent-tag">Lugar · Sede central</span>
+        <h3>Museo Warren</h3>
+        <p>El sótano donde Ed y Lorraine encerraron, bajo bendición constante, cada objeto maldito que cruzó su camino.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="closing">
+  <div class="wrap">
+    <span class="eyebrow">Caso cerrado</span>
+    <h2 style="margin-top:16px;">El expediente sigue abierto para quien se atreva a mirarlo</h2>
+    <p>Doce años, diez casos y un matrimonio que convirtió el miedo ajeno en advertencia. La saga se despide, pero el archivo queda.</p>
+    <svg class="seal-mini" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="60" cy="60" r="52" stroke="#e2231f" stroke-width="1.2" stroke-dasharray="2 4"/>
+      <text x="60" y="66" text-anchor="middle" fill="#e2231f" font-family="Cinzel, serif" font-size="13" font-weight="700">W</text>
+    </svg>
+  </div>
+</section>
+
+<footer>
+  <div class="archived">Expediente archivado por</div>
+  <div class="name">Señorita Gaitán</div>
+  <div class="foot-line">El Conjuro — Universo Warren · Página de fan, no oficial</div>
+</footer>
+
+<script>
+  const films = [
+    { n:1, es:2013, cr:1971, saga:"El Conjuro", title:"El Conjuro", desc:"El caso de la familia Perron en una granja de Rhode Island marca el debut cinematográfico de Ed y Lorraine Warren." },
+    { n:2, es:2014, cr:1967, saga:"Annabelle", title:"Annabelle", desc:"Un médico y su esposa reciben una muñeca de porcelana que se convierte en el vehículo de una presencia maligna." },
+    { n:3, es:2016, cr:1977, saga:"El Conjuro", title:"El Conjuro 2", desc:"Los Warren viajan a Londres para investigar el caso Enfield, uno de los expedientes paranormales más citados del Reino Unido." },
+    { n:4, es:2017, cr:1955, saga:"Annabelle", title:"Annabelle: Creation", desc:"Años antes de llegar a los Warren, la muñeca despierta en el taller de un fabricante de juguetes marcado por la tragedia." },
+    { n:5, es:2018, cr:1952, saga:"La Monja", title:"La Monja", desc:"Un sacerdote y una novicia viajan a una abadía rumana para esclarecer el origen de Valak, la entidad con forma de religiosa." },
+    { n:6, es:2019, cr:1973, saga:"La Llorona", title:"La Maldición de La Llorona", desc:"Una trabajadora social se enfrenta al espíritu de una madre condenada a llorar eternamente por sus hijos." },
+    { n:7, es:2019, cr:1972, saga:"Annabelle", title:"Annabelle Comes Home", desc:"La muñeca escapa de su vitrina bendecida en casa de los Warren y libera a otras entidades de la colección." },
+    { n:8, es:2021, cr:1981, saga:"El Conjuro", title:"El Conjuro 3: El Diablo Me Obligó a Hacerlo", desc:"Por primera vez, un acusado alega posesión demoníaca como defensa legal, y los Warren terminan en los tribunales." },
+    { n:9, es:2023, cr:1956, saga:"La Monja", title:"La Monja 2", desc:"Valak reaparece en un internado francés, obligando a la hermana Irene a cerrar un círculo abierto años atrás." },
+    { n:10, es:2025, cr:1986, saga:"El Conjuro", title:"El Conjuro 4: Últimos Ritos", desc:"El caso de la familia Smurl pone punto final a la carrera de Ed y Lorraine Warren frente a las cámaras." },
+  ];
+
+  const board = document.getElementById('board');
+
+  function render(mode){
+    const list = mode === 'cronologico'
+      ? [...films].sort((a,b)=>a.cr-b.cr)
+      : [...films].sort((a,b)=>a.es-b.es);
+
+    board.innerHTML = list.map((f, i) => `
+      <div class="case-row">
+        <span class="pin"></span>
+        <article class="card">
+          <div class="num">Caso Nº ${String(i+1).padStart(2,'0')}</div>
+          <h3>${f.title}</h3>
+          <div class="yr">${mode === 'cronologico' ? 'Ambientada en ' + f.cr : 'Estreno ' + f.es}</div>
+          <p>${f.desc}</p>
+          <span class="saga-tag">${f.saga}</span>
+        </article>
+      </div>
+    `).join('');
+  }
+
+  document.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      render(btn.dataset.mode);
+    });
+  });
+
+  render('estreno');
+</script>
+
+</body>
+</html>
